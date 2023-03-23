@@ -124,12 +124,13 @@ def _target_linux_gnu(gocpu, zigcpu, glibc_version):
     )
 
 def _target_linux_musl(gocpu, zigcpu):
+    musl = "musl" if gocpu != "arm" else "musleabihf"
     return struct(
-        gotarget = "linux_{}_musl".format(gocpu),
-        zigtarget = "{}-linux-musl".format(zigcpu),
+        gotarget = "linux_{}_{}".format(gocpu, musl),
+        zigtarget = "{}-linux-{}".format(zigcpu, musl),
         includes = [
-                       "libc/include/{}-linux-musl".format(zigcpu),
-                       "libc/include/generic-musl",
+                       "libc/include/{}-linux-{}".format(zigcpu, musl),
+                       "libc/include/generic-{}".format(musl),
                    ] +
                    # x86_64-linux-any is x86_64-linux and x86-linux combined.
                    (["libc/include/x86-linux-any"] if zigcpu == "x86_64" else []) +
@@ -138,12 +139,12 @@ def _target_linux_musl(gocpu, zigcpu):
         ] + _INCLUDE_TAIL,
         dynamic_library_linkopts = [],
         copts = ["-D_LIBCPP_HAS_MUSL_LIBC", "-D_LIBCPP_HAS_THREAD_API_PTHREAD"],
-        libc = "musl" if gocpu != "arm" else "musleabihf",
+        libc = musl,
         bazel_target_cpu = "k8",
         constraint_values = [
             "@platforms//os:linux",
             "@platforms//cpu:{}".format(zigcpu),
         ],
-        libc_constraint = "@zig_sdk//libc:musl",
+        libc_constraint = "@zig_sdk//libc:{}".format(musl),
         tool_paths = {"ld": "ld.lld"},
     )

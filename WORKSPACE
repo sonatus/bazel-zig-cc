@@ -57,7 +57,7 @@ register_toolchains(
     # (linux,darwin,windows)x(amd64,arm64)
     "@zig_sdk//toolchain:linux_amd64_gnu.2.19",
     "@zig_sdk//toolchain:linux_arm64_gnu.2.28",
-    "@zig_sdk//toolchain:linux_arm_musl",
+    "@zig_sdk//toolchain:linux_arm_musleabihf",
     "@zig_sdk//toolchain:darwin_amd64",
     "@zig_sdk//toolchain:darwin_arm64",
     "@zig_sdk//toolchain:darwin_arm",
@@ -74,5 +74,5 @@ register_toolchains(
     "@zig_sdk//libc_aware/toolchain:linux_arm64_gnu.2.28",
     "@zig_sdk//libc_aware/toolchain:linux_arm64_musl",
     # arm toolchains for libc-aware platforms:
-    "@zig_sdk//libc_aware/toolchain:linux_arm_musl",
+    "@zig_sdk//libc_aware/toolchain:linux_arm_musleabihf",
 )
