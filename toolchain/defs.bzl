@@ -59,7 +59,7 @@ _HOST_PLATFORM_EXT = {
 
 def toolchains(
         version = _VERSION,
-        url_formats = [URL_FORMAT_NIGHTLY, URL_FORMAT_JAKSTYS],
+        url_formats = [URL_FORMAT_RELEASE],
         host_platform_sha256 = _HOST_PLATFORM_SHA256,
         host_platform_ext = _HOST_PLATFORM_EXT):
     """
