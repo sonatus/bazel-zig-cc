@@ -38,7 +38,7 @@ def zig_tool_path(os):
 
 def target_structs():
     ret = []
-    for zigcpu, gocpu in (("x86_64", "amd64"), ("aarch64", "arm64"), ("armv7", "arm")):
+    for zigcpu, gocpu in (("x86_64", "amd64"), ("aarch64", "arm64"), ("arm", "arm")):
         ret.append(_target_darwin(gocpu, zigcpu))
         ret.append(_target_windows(gocpu, zigcpu))
         ret.append(_target_linux_musl(gocpu, zigcpu))
@@ -138,7 +138,7 @@ def _target_linux_musl(gocpu, zigcpu):
         ] + _INCLUDE_TAIL,
         dynamic_library_linkopts = [],
         copts = ["-D_LIBCPP_HAS_MUSL_LIBC", "-D_LIBCPP_HAS_THREAD_API_PTHREAD"],
-        libc = "musl",
+        libc = "musl" if gocpu != "arm" else "musleabihf",
         bazel_target_cpu = "k8",
         constraint_values = [
             "@platforms//os:linux",

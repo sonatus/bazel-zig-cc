@@ -1,6 +1,6 @@
 load("@bazel-zig-cc//toolchain/private:defs.bzl", "LIBCS")
 
-_CPUS = (("x86_64", "amd64"), ("aarch64", "arm64"), ("armv7", "arm"))
+_CPUS = (("x86_64", "amd64"), ("aarch64", "arm64"), ("arm", "arm"))
 _OS = {
     "linux": ["linux"],
     "macos": ["macos", "darwin"],
@@ -39,7 +39,8 @@ def declare_platform(gocpu, zigcpu, bzlos, os, suffix = "", extra_constraints = 
         constraint_values = constraint_values,
     )
 
-    native.platform(
-        name = "{os}_{gocpu}{suffix}".format(os = os, gocpu = gocpu, suffix = suffix),
-        constraint_values = constraint_values,
-    )
+    if gocpu != zigcpu:
+        native.platform(
+            name = "{os}_{gocpu}{suffix}".format(os = os, gocpu = gocpu, suffix = suffix),
+            constraint_values = constraint_values,
+        )
