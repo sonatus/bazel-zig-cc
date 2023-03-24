@@ -149,8 +149,7 @@ fi
 if [ -n "$TMP_ZIG_DIR" ]; then
     _cache_prefix=$TMP_ZIG_DIR
 else
-    env
-    exit 1
+    _cache_prefix=/tmp
 fi
 export ZIG_LIB_DIR
 export ZIG_LOCAL_CACHE_DIR="$_cache_prefix/bazel-zig-cc"
