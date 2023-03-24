@@ -147,16 +147,11 @@ else
     ZIG_LIB_DIR="$(dirname "$0")/../../lib"
     ZIG_EXE="$(dirname "$0")/../../zig"
 fi
-if [ -n "$TMPDIR" ]; then
-    _cache_prefix=$TMPDIR
-elif [ -n "$HOME" ]; then
-    if [ "$(uname)" = Darwin ]; then
-        _cache_prefix="$HOME/Library/Caches"
-    else
-        _cache_prefix="$HOME/.cache"
-    fi
+if [ -n "$TMP_ZIG_DIR" ]; then
+    _cache_prefix=$TMP_ZIG_DIR
 else
-    _cache_prefix=/tmp
+    env
+    exit 1
 fi
 export ZIG_LIB_DIR
 export ZIG_LOCAL_CACHE_DIR="$_cache_prefix/bazel-zig-cc"
