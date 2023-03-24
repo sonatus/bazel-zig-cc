@@ -44,8 +44,8 @@ URL_FORMAT_JAKSTYS = "https://dl.jakstys.lt/zig/zig-{host_platform}-{version}.{_
 _VERSION = "0.11.0-dev.2247+38ee46dda-sonatus"
 
 _HOST_PLATFORM_SHA256 = {
-    "linux-x86_64": "dd96398db27d97259e68e398d2632844fd4107d78d8de2f0f37a607d98219ed6",
-    "macos-aarch64": "f20e2a9d735b3c2ab6f531d4e5e0750ed11cdfe8c359b3d69ccb8e0cb8537a91",
+    "linux-x86_64": "2cc5b44d88e45d7afd740e71296629aaef8a9f9da28dbe2f91001a54a2d80c53",
+    "macos-aarch64": "2b9a1b19e0f5a86e6af8d569ad55d82ce9662e0a4ef2ea8f26c95af11775106e",
 }
 
 _HOST_PLATFORM_EXT = {
@@ -149,7 +149,7 @@ fi
 if [ -n "$TMP_ZIG_DIR" ]; then
     _cache_prefix=$TMP_ZIG_DIR
 else
-    _cache_prefix=/tmp
+    _cache_prefix=.
 fi
 export ZIG_LIB_DIR
 export ZIG_LOCAL_CACHE_DIR="$_cache_prefix/bazel-zig-cc"
