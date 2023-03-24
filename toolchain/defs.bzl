@@ -22,6 +22,8 @@ __asm__(".symver fcntl64, fcntl@GLIBC_2.2.5");
 #endif
 """
 
+URL_FORMAT_SONATUS = "https://github.com/sonatus/zig-bootstrap/blob/arm/zig-{host_platform}-{version}.{_ext}?raw=true"
+
 # Official recommended version. Should use this when we have a usable release.
 URL_FORMAT_RELEASE = "https://ziglang.org/download/{version}/zig-{host_platform}-{version}.{_ext}"
 
@@ -39,14 +41,11 @@ URL_FORMAT_NIGHTLY = "https://ziglang.org/builds/zig-{host_platform}-{version}.{
 # which, as of writing, has been quite reliable.
 URL_FORMAT_JAKSTYS = "https://dl.jakstys.lt/zig/zig-{host_platform}-{version}.{_ext}"
 
-_VERSION = "0.11.0-dev.324+f61c5f3f5"
+_VERSION = "0.11.0-dev.2247+38ee46dda-sonatus"
 
 _HOST_PLATFORM_SHA256 = {
-    "linux-aarch64": "9d85f451e06eb246ba6ac11c20ea988f38de078e31c922b7919c599d097dcc17",
-    "linux-x86_64": "b8c2876d7012234b99dc0d772a39ef3223d65a20acd0d061c4be692375220af0",
-    "macos-aarch64": "50a7bf17e36f677d994f18f021fb8cdcd17faceb8504994a1083888601059606",
-    "macos-x86_64": "90360f529b8e103ac3538de9a27835bfb37a9f6b4b1e5581bcb23ec2c4cac2e6",
-    "windows-x86_64": "87669cc8bda2c6eef0f3c298ddd545d495e1d3554b787bd7ccbca144c5ef729a",
+    "linux-x86_64": "dd96398db27d97259e68e398d2632844fd4107d78d8de2f0f37a607d98219ed6",
+    "macos-aarch64": "f20e2a9d735b3c2ab6f531d4e5e0750ed11cdfe8c359b3d69ccb8e0cb8537a91",
 }
 
 _HOST_PLATFORM_EXT = {
@@ -59,7 +58,7 @@ _HOST_PLATFORM_EXT = {
 
 def toolchains(
         version = _VERSION,
-        url_formats = [URL_FORMAT_RELEASE],
+        url_formats = [URL_FORMAT_SONATUS],
         host_platform_sha256 = _HOST_PLATFORM_SHA256,
         host_platform_ext = _HOST_PLATFORM_EXT):
     """
