@@ -61,7 +61,7 @@ def _compilation_mode_features(ctx):
                 actions = actions,
                 flag_groups = [
                     flag_group(
-                        flags = ["-O2", "-DNDEBUG"],
+                        flags = ["-O2", "-flto", "-DNDEBUG"],
                     ),
                 ],
             ),
