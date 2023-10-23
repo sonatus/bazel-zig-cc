@@ -41,11 +41,11 @@ URL_FORMAT_NIGHTLY = "https://ziglang.org/builds/zig-{host_platform}-{version}.{
 # which, as of writing, has been quite reliable.
 URL_FORMAT_JAKSTYS = "https://dl.jakstys.lt/zig/zig-{host_platform}-{version}.{_ext}"
 
-_VERSION = "0.11.0-dev.2247+38ee46dda-sonatus"
+_VERSION = "0.11.0-sonatus"
 
 _HOST_PLATFORM_SHA256 = {
-    "linux-x86_64": "2cc5b44d88e45d7afd740e71296629aaef8a9f9da28dbe2f91001a54a2d80c53",
-    "macos-aarch64": "2b9a1b19e0f5a86e6af8d569ad55d82ce9662e0a4ef2ea8f26c95af11775106e",
+    "linux-x86_64": "51c9304af5d536ad411b57ffd20e9d6bf2d168c17d966e230fff275a667b95ec",
+    "macos-aarch64": "15e46c3f7c6e4e6d2690e80906c0d5ef1ff6ceaf9184bf8f512930d84c100598",
 }
 
 _HOST_PLATFORM_EXT = {
