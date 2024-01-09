@@ -146,13 +146,8 @@ else
     ZIG_LIB_DIR="$(dirname "$0")/../../lib"
     ZIG_EXE="$(dirname "$0")/../../zig"
 fi
-if [ -n "$TMP_ZIG_DIR" ]; then
-    _cache_prefix=$TMP_ZIG_DIR
-else
-    _cache_prefix=.
-fi
 export ZIG_LIB_DIR
-export ZIG_LOCAL_CACHE_DIR="$_cache_prefix/bazel-zig-cc"
+export ZIG_LOCAL_CACHE_DIR="/tmp/bazel-zig-cc-{user}"
 export ZIG_GLOBAL_CACHE_DIR=$ZIG_LOCAL_CACHE_DIR
 {maybe_gohack}
 exec "$ZIG_EXE" "{zig_tool}" {maybe_target} "$@"
@@ -177,7 +172,7 @@ fi
 eval set -- "$saved"
 """
 
-def _zig_tool_wrapper(zig_tool, is_windows, cache_prefix, zigtarget):
+def _zig_tool_wrapper(zig_tool, is_windows, cache_prefix, user, zigtarget):
     if zig_tool in ["c++", "build-exe", "build-lib", "build-obj"]:
         maybe_target = "-target {}".format(zigtarget)
     else:
@@ -186,6 +181,7 @@ def _zig_tool_wrapper(zig_tool, is_windows, cache_prefix, zigtarget):
     kwargs = dict(
         zig_tool = zig_tool,
         cache_prefix = cache_prefix,
+        user = user,
         maybe_gohack = _ZIG_TOOL_GOHACK if (zig_tool == "c++" and not is_windows) else "",
         maybe_target = maybe_target,
     )
@@ -268,6 +264,7 @@ def _zig_repository_impl(repository_ctx):
                 zig_tool,
                 os == "windows",
                 repository_ctx.os.environ.get("BAZEL_ZIG_CC_CACHE_PREFIX", ""),
+                repository_ctx.os.environ.get("USER", ""),
                 zigtarget = target_config.zigtarget,
             )
 
@@ -295,7 +292,7 @@ zig_repository = repository_rule(
         "url_formats": attr.string_list(allow_empty = False),
         "host_platform_ext": attr.string_dict(),
     },
-    environ = ["BAZEL_ZIG_CC_CACHE_PREFIX"],
+    environ = ["BAZEL_ZIG_CC_CACHE_PREFIX", "USER"],
     implementation = _zig_repository_impl,
 )
 
