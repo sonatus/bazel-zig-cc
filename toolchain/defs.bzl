@@ -22,7 +22,8 @@ __asm__(".symver fcntl64, fcntl@GLIBC_2.2.5");
 #endif
 """
 
-URL_FORMAT_SONATUS = "https://github.com/sonatus/zig-bootstrap/blob/arm/zig-{host_platform}-{version}.{_ext}?raw=true"
+URL_FORMAT_SONATUS = "https://github.com/sonatus/zig-bootstrap/blob/f78b61db06ae5bac1f89c9e5cd148852eb1cd823/zig-{host_platform}-{version}.{_ext}?raw=true"
+
 
 # Official recommended version. Should use this when we have a usable release.
 URL_FORMAT_RELEASE = "https://ziglang.org/download/{version}/zig-{host_platform}-{version}.{_ext}"
@@ -44,8 +45,8 @@ URL_FORMAT_JAKSTYS = "https://dl.jakstys.lt/zig/zig-{host_platform}-{version}.{_
 _VERSION = "0.11.0-sonatus"
 
 _HOST_PLATFORM_SHA256 = {
-    "linux-x86_64": "51c9304af5d536ad411b57ffd20e9d6bf2d168c17d966e230fff275a667b95ec",
-    "macos-aarch64": "15e46c3f7c6e4e6d2690e80906c0d5ef1ff6ceaf9184bf8f512930d84c100598",
+    "linux-x86_64": "356ac6b78e59cea03e9bc82d04b3faf574f46dfc4206db66f1d9bed08daeb736",
+    "macos-aarch64": "392c139af48a1170ddb0070b0c7ea29417f3e8be640564ed4119c3d6ab4691ca",
 }
 
 _HOST_PLATFORM_EXT = {
@@ -133,7 +134,6 @@ fi
 export ZIG_LIB_DIR
 export ZIG_LOCAL_CACHE_DIR="{cache_prefix}/bazel-zig-cc"
 export ZIG_GLOBAL_CACHE_DIR="{cache_prefix}/bazel-zig-cc"
-{maybe_gohack}
 exec "$ZIG_EXE" "{zig_tool}" {maybe_target} "$@"
 """
 
@@ -147,32 +147,10 @@ else
     ZIG_EXE="$(dirname "$0")/../../zig"
 fi
 export ZIG_LIB_DIR
-export ZIG_LOCAL_CACHE_DIR="/tmp/bazel-zig-cc-{user}"
-export ZIG_GLOBAL_CACHE_DIR=$ZIG_LOCAL_CACHE_DIR
-{maybe_gohack}
 exec "$ZIG_EXE" "{zig_tool}" {maybe_target} "$@"
 """
 
-# The abomination below adds "-O2" to Go's link-prober command. Saves around
-# 25s for the first compilation for a particular architecture. Can be deleted
-# if/after https://go-review.googlesource.com/c/go/+/436884 is merged.
-# Shell hackery taken from
-# https://web.archive.org/web/20100129154217/http://www.seanius.net/blog/2009/03/saving-and-restoring-positional-params
-_ZIG_TOOL_GOHACK = """
-quote(){ echo "$1" | sed -e "s,','\\\\'',g"; }
-for arg in "$@"; do saved="${saved:+$saved }'$(quote "$arg")'"; done
-while [ "$#" -gt 6 ]; do shift; done
-if [ "$*" = "-Wl,--no-gc-sections -x c - -o /dev/null" ]; then
-  # This command probes if `--no-gc-sections` is accepted by the linker.
-  # Since it is executed in /tmp, the ZIG_LIB_DIR is absolute,
-  # glibc stubs and libc++ cannot be shared with other invocations (which use
-  # a relative ZIG_LIB_DIR).
-  exit 0;
-fi
-eval set -- "$saved"
-"""
-
-def _zig_tool_wrapper(zig_tool, is_windows, cache_prefix, user, zigtarget):
+def _zig_tool_wrapper(zig_tool, is_windows, cache_prefix, zigtarget):
     if zig_tool in ["c++", "build-exe", "build-lib", "build-obj"]:
         maybe_target = "-target {}".format(zigtarget)
     else:
@@ -181,8 +159,6 @@ def _zig_tool_wrapper(zig_tool, is_windows, cache_prefix, user, zigtarget):
     kwargs = dict(
         zig_tool = zig_tool,
         cache_prefix = cache_prefix,
-        user = user,
-        maybe_gohack = _ZIG_TOOL_GOHACK if (zig_tool == "c++" and not is_windows) else "",
         maybe_target = maybe_target,
     )
 
@@ -264,7 +240,6 @@ def _zig_repository_impl(repository_ctx):
                 zig_tool,
                 os == "windows",
                 repository_ctx.os.environ.get("BAZEL_ZIG_CC_CACHE_PREFIX", ""),
-                repository_ctx.os.environ.get("USER", ""),
                 zigtarget = target_config.zigtarget,
             )
 
@@ -292,7 +267,7 @@ zig_repository = repository_rule(
         "url_formats": attr.string_list(allow_empty = False),
         "host_platform_ext": attr.string_dict(),
     },
-    environ = ["BAZEL_ZIG_CC_CACHE_PREFIX", "USER"],
+    environ = ["BAZEL_ZIG_CC_CACHE_PREFIX"],
     implementation = _zig_repository_impl,
 )
 
