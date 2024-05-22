@@ -22,31 +22,13 @@ __asm__(".symver fcntl64, fcntl@GLIBC_2.2.5");
 #endif
 """
 
-URL_FORMAT_SONATUS = "https://github.com/sonatus/zig-bootstrap/blob/04062d249413d16704b45fea268a57311b40b335/zig-{host_platform}-{version}.{_ext}?raw=true"
+URL_FORMAT_SONATUS = "https://github.com/sonatus/zig-bootstrap/blob/95071d6b8b965a3cf1c2ca86096317ad0b1e7339/zig-{host_platform}-{version}.{_ext}?raw=true"
 
-
-# Official recommended version. Should use this when we have a usable release.
-URL_FORMAT_RELEASE = "https://ziglang.org/download/{version}/zig-{host_platform}-{version}.{_ext}"
-
-# Caution: nightly releases are purged from ziglang.org after ~90 days. A real
-# solution would be to allow the downstream project specify their own mirrors.
-# This is explained in
-# https://sr.ht/~motiejus/bazel-zig-cc/#alternative-download-urls and is
-# awaiting my attention or your contribution.
-URL_FORMAT_NIGHTLY = "https://ziglang.org/builds/zig-{host_platform}-{version}.{_ext}"
-
-# Author's mirror that doesn't purge the nightlies so aggressively. I will be
-# cleaning those up manually only after the artifacts are not in use for many
-# months in bazel-zig-cc. dl.jakstys.lt is a small x86_64 server with an NVMe
-# drive sitting in my home closet on a 1GB/s symmetric residential connection,
-# which, as of writing, has been quite reliable.
-URL_FORMAT_JAKSTYS = "https://dl.jakstys.lt/zig/zig-{host_platform}-{version}.{_ext}"
-
-_VERSION = "0.11.0-sonatus"
+_VERSION = "0.12.0-sonatus"
 
 _HOST_PLATFORM_SHA256 = {
-    "linux-x86_64": "c7fb0b19108f36b1a6f7282e2543403882b752baeda3a8621c4e0581e5a7f206",
-    "macos-aarch64": "58f9ec017201611d16b705c233cc56e2d83fc35f94902687e9318cbe723d9198",
+    "linux-x86_64": "6638ac9fe758a78664136e7d5a1c244b8571dd318f736a498f26d57dac308c07",
+    "macos-aarch64": "70272d889b14fed24ea87f28aca3f304fbe8408ab72eb24e46344a5495e37044",
 }
 
 _HOST_PLATFORM_EXT = {
