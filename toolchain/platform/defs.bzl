@@ -14,6 +14,8 @@ def declare_platforms():
             for os in oss:
                 declare_platform(gocpu, zigcpu, bzlos, os)
 
+    declare_platform("wasm", "wasm32", "wasi", "wasip1")
+
 def declare_libc_aware_platforms():
     # create @zig_sdk//{os}_{arch}_platform entries with zig and go conventions
     # with libc specified

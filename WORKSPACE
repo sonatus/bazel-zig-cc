@@ -75,4 +75,6 @@ register_toolchains(
     "@zig_sdk//libc_aware/toolchain:linux_arm64_musl",
     # arm toolchains for libc-aware platforms:
     "@zig_sdk//libc_aware/toolchain:linux_arm_musleabihf",
+    # wasm/wasi toolchains
+    "@zig_sdk//toolchain:wasip1_wasm",
 )
