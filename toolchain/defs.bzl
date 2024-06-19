@@ -22,13 +22,13 @@ __asm__(".symver fcntl64, fcntl@GLIBC_2.2.5");
 #endif
 """
 
-URL_FORMAT_SONATUS = "https://github.com/sonatus/zig-bootstrap/blob/8598a0570a67cfef28b12e8012462d1dc0218a34/zig-{host_platform}-{version}.{_ext}?raw=true"
+URL_FORMAT_SONATUS = "https://github.com/sonatus/zig-bootstrap/blob/c1ba2d68a2bc0512a5bc37cc37c52395d4e9a2f7/zig-{host_platform}-{version}.{_ext}?raw=true"
 
 _VERSION = "0.12.1-sonatus"
 
 _HOST_PLATFORM_SHA256 = {
-    "linux-x86_64": "da3fc829f8cc91a2ec75044d19dbf273bad6d70945962611b672772743e59a69",
-    "macos-aarch64": "1a3727ad5128a9195522d3fd8d1cd2fe049dee4b11150f40131a63c4d86850fa",
+    "linux-x86_64": "16797f7adb2abcb357df3f8dbf0467fc81d7259ecfc419270919c2a06e8e6461",
+    "macos-aarch64": "c7aa8347d5e334894bcf2a74430550b6eb5fb3e2f5c7481232810a3c55805637",
 }
 
 _HOST_PLATFORM_EXT = {
