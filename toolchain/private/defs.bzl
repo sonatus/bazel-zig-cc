@@ -38,12 +38,12 @@ def zig_tool_path(os):
 
 def target_structs():
     ret = []
-    for zigcpu, gocpu in (("x86_64", "amd64"), ("aarch64", "arm64"), ("arm", "arm")):
+    for zigcpu, gocpu, bzlcpu in (("x86_64", "amd64", "k8"), ("aarch64", "arm64", "arm64"), ("arm", "arm", "arm")):
         ret.append(_target_darwin(gocpu, zigcpu))
         ret.append(_target_windows(gocpu, zigcpu))
-        ret.append(_target_linux_musl(gocpu, zigcpu))
+        ret.append(_target_linux_musl(gocpu, zigcpu, bzlcpu))
         for glibc in _GLIBCS:
-            ret.append(_target_linux_gnu(gocpu, zigcpu, glibc))
+            ret.append(_target_linux_gnu(gocpu, zigcpu, bzlcpu, glibc))
     ret.append(_target_wasm())
     return ret
 
@@ -90,7 +90,7 @@ def _target_windows(gocpu, zigcpu):
         tool_paths = {"ld": "ld64.lld"},
     )
 
-def _target_linux_gnu(gocpu, zigcpu, glibc_version):
+def _target_linux_gnu(gocpu, zigcpu, bzlcpu, glibc_version):
     glibc_suffix = "gnu.{}".format(glibc_version)
 
     # https://github.com/ziglang/zig/issues/5882#issuecomment-888250676
@@ -115,7 +115,7 @@ def _target_linux_gnu(gocpu, zigcpu, glibc_version):
         dynamic_library_linkopts = [],
         copts = [],
         libc = "glibc",
-        bazel_target_cpu = "k8",
+        bazel_target_cpu = bzlcpu,
         constraint_values = [
             "@platforms//os:linux",
             "@platforms//cpu:{}".format(zigcpu),
@@ -124,7 +124,7 @@ def _target_linux_gnu(gocpu, zigcpu, glibc_version):
         tool_paths = {"ld": "ld.lld"},
     )
 
-def _target_linux_musl(gocpu, zigcpu):
+def _target_linux_musl(gocpu, zigcpu, bzlcpu):
     musl = "musl" if gocpu != "arm" else "musleabihf"
     return struct(
         gotarget = "linux_{}_{}".format(gocpu, musl),
@@ -141,7 +141,7 @@ def _target_linux_musl(gocpu, zigcpu):
         dynamic_library_linkopts = [],
         copts = ["-D_LIBCPP_HAS_MUSL_LIBC", "-D_LIBCPP_HAS_THREAD_API_PTHREAD"],
         libc = "musl",
-        bazel_target_cpu = "k8",
+        bazel_target_cpu = bzlcpu,
         constraint_values = [
             "@platforms//os:linux",
             "@platforms//cpu:{}".format(zigcpu),
