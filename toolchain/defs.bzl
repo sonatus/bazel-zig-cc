@@ -288,7 +288,11 @@ def declare_files(os):
                 ":zig",
                 ":{}_includes".format(target_config.zigtarget),
                 cxx_tool_label,
-            ],
+            ] + native.glob([
+              "lib/std/**",
+              "lib/*.zig",
+              "lib/c/**",
+            ]),
         )
 
         filegroup(
@@ -306,6 +310,7 @@ def declare_files(os):
                 "lib/std/**",
                 "lib/*.zig",
                 "lib/*.h",
+                "lib/c/**",
             ]),
         )
 
